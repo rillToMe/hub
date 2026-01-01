@@ -10,7 +10,6 @@ loginForm.addEventListener('submit', async (e) => {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // Loading State
     btnText.innerText = "Authenticating...";
     btnIcon.className = "fa-solid fa-spinner fa-spin";
     btnLogin.style.opacity = "0.8";
@@ -18,7 +17,6 @@ loginForm.addEventListener('submit', async (e) => {
     errorMessage.classList.remove('show');
 
     try {
-        // Efek dramatis sebentar
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         const response = await fetch('/api/admin/login', {
