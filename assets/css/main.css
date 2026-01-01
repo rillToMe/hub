@@ -1,14 +1,4 @@
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("../fonts/jetbrainsMono/webfonts/JetBrainsMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("../fonts/jetbrainsMono/webfonts/JetBrainsMono-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-}
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 
 html, body {
   height: 100%;
