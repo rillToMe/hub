@@ -34,7 +34,7 @@ loginForm.addEventListener('submit', async (e) => {
             btnIcon.className = "fa-solid fa-check";
             btnText.innerText = "Success!";
             setTimeout(() => {
-                window.location.href = '/admin/';
+                window.location.href = "/api/admin/index.html";
             }, 500);
         } else {
             throw new Error();
