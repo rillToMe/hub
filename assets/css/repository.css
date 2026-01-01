@@ -1,0 +1,275 @@
+ul li {
+  margin:10px 0;
+}
+
+.release-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #161b22 25%,
+    #1f2937 37%,
+    #161b22 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.skeleton-release {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.skeleton-title {
+  height: 18px;
+  width: 60%;
+  margin-bottom: 8px;
+}
+
+.skeleton-date {
+  height: 12px;
+  width: 30%;
+  margin-bottom: 10px;
+}
+
+.skeleton-line {
+  height: 12px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.skeleton-line.short {
+  width: 70%;
+}
+
+
+.repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.repo-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.repo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.repo-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.repo-toggle {
+  font-size: 1.4rem;
+  transition: transform .25s ease;
+}
+
+.repo-card.open .repo-toggle {
+  transform: rotate(180deg);
+}
+
+.release-panel {
+  margin-top: 14px;
+  display: none;
+  animation: fadeSlide .3s ease;
+}
+
+.repo-card.open .release-panel {
+  display: block;
+}
+
+.release {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  margin-bottom: 10px;
+}
+
+.release h4 {
+  margin: 0;
+  font-size: .95rem;
+}
+
+.release time {
+  font-size: .8rem;
+  opacity: .7;
+}
+
+.release a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: .85rem;
+  color: var(--accent);
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  margin: 20px 0;
+  font-size: 1rem;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.repo-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.repo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  cursor: pointer;
+}
+
+.repo-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.repo-toggle {
+  transition: transform .25s ease;
+}
+
+.repo-card.open .repo-toggle {
+  transform: rotate(180deg);
+}
+
+.release-panel {
+  padding: 0 20px;
+  border-top: 1px solid var(--border);
+  display: none;          
+  flex-direction: column;
+  gap: 18px;
+}
+
+.repo-card.open .release-panel {
+  display: flex;
+  padding: 20px;
+}
+
+.release-card {
+  background: #0b1220;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.release-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.release-card h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.release-card time {
+  font-size: 12px;
+  opacity: .65;
+}
+
+.release-card p {
+  margin: 10px 0;
+  opacity: .9;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.badge.latest {
+  background: #22c55e;
+  color: #022c22;
+}
+
+.asset-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.asset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #1f2937;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.asset-btn:hover {
+  background: #273549;
+}
+
+.asset-btn .size {
+  font-size: 11px;
+  opacity: .65;
+}
+
+.release-link {
+  font-size: 0.9rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.release-link:hover {
+  text-decoration: underline;
+}
+
+.muted {
+  opacity: .6;
+}
+
+@media (max-width: 640px) {
+  .asset-btn {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+

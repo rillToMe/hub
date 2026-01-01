@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+  http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self';
+    img-src 'self' data:;
+    connect-src 'self' http://localhost:3001;
+  "
+/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DitDev - App</title>
+  <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="brand">DitDev</a>
+  </div>
+
+  <div class="nav-links desktop-only">
+    <a href="index.html"> <i class="fa-solid fa-house"></i> Home</a>
+    <a href="assets/pages/repository.html"> <i class="fa-brands fa-github"></i> Repository</a>
+    <a href="assets/pages/about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+  </div>
+
+  <button class="menu-btn mobile-only" id="menuBtn">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu-header">
+    <div class="mobile-brand">DitDev</div>
+    <small>Developer Hub</small>
+  </div>
+
+  <div class="mobile-menu-section">
+    <a href="index.html">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+
+    <a href="assets/pages/repository.html">
+      <i class="fa-brands fa-github"></i>
+      <span>Repository</span>
+    </a>
+
+    <a href="assets/pages/about.html">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>About</span>
+    </a>
+  </div>
+
+  <div class="mobile-menu-footer">
+    <span class="status-dot"></span>
+    API Online
+  </div>
+
+</div>
+
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+
+<main class="container app-layout">
+
+  <section class="app-main">
+
+    <div class="app-card">
+      <div class="app-header">
+        <img id="app-icon">
+        <div>
+          <h1 id="app-name"></h1>
+          <p id="app-desc"></p>
+        </div>
+      </div>
+
+      <div id="download-buttons"></div>
+
+      <div class="links">
+        <a id="repo" target="_blank">
+          <i class="fa-brands fa-github"></i> GitHub Repository
+        </a>
+        <a id="releases" target="_blank">
+          <i class="fa-solid fa-tag"></i> Release Page
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="app-side">
+
+  <div class="side-card">
+    <h3><i class="fa-solid fa-circle-info"></i> App Info</h3>
+    <ul>
+      <li id="app-platform">
+        <strong>Platform:</strong> -
+      </li>
+      <li>
+        <strong>Release:</strong>
+        <a id="app-release" href="#" target="_blank">GitHub</a>
+      </li>
+      <li id="app-license">
+        <strong>License:</strong> -
+      </li>
+    </ul>
+  </div>
+
+  <div class="side-card">
+    <h3><i class="fa-solid fa-circle-question"></i> About</h3>
+    <p id="app-about">
+      -
+    </p>
+  </div>
+
+</aside>
+
+
+</main>
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <div class="footer-logo">DitDev<span>.</span></div>
+      <p>
+        Personal developer hub for tools, experiments,<br>
+        and open-source projects.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <h4>Links</h4>
+      <a href="index.html">Home</a>
+      <a href="assets/pages/repository.html">Repositories</a>
+      <a href="assets/pages/about.html">About</a>
+    </div>
+
+    <div class="footer-social">
+      <h4>Connect</h4>
+      <div class="social-icons">
+        <a href="https://github.com/rillToMe" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://instagram.com/rill_lyrics" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@goodvibes_music28" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://ditdev.vercel.app" target="_blank" aria-label="Portfolio"><i class="fa-solid fa-globe"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    &copy; <span id="year"></span> DitDev. All rights reserved.
+  </div>
+</footer>
+
+
+</body>
+</html>

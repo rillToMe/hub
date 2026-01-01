@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta
+  http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self';
+    img-src 'self' data:;
+    connect-src 'self' http://localhost:3001;
+  "
+/>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DitDev - About</title>
+  <link rel="stylesheet" href="../fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/repository.css">
+  <link rel="stylesheet" href="../css/about.css">
+  <script src="../js/main.js" defer></script>
+  <script src="../js/about.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-left">
+    <a href="../../index.html" class="brand">DitDev</a>
+  </div>
+
+  <div class="nav-links desktop-only">
+    <a href="../../index.html"> <i class="fa-solid fa-house"></i> Home</a>
+    <a href="repository.html"> <i class="fa-brands fa-github"></i> Repository</a>
+    <a href="about.html"><i class="fa-solid fa-circle-info"></i> About</a>
+  </div>
+
+  <button class="menu-btn mobile-only" id="menuBtn">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu-header">
+    <div class="mobile-brand">DitDev</div>
+    <small>Developer Hub</small>
+  </div>
+
+  <div class="mobile-menu-section">
+    <a href="/index.html">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+
+    <a href="../pages/repository.html">
+      <i class="fa-brands fa-github"></i>
+      <span>Repository</span>
+    </a>
+
+    <a href="../pages/about.html">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>About</span>
+    </a>
+  </div>
+
+  <div class="mobile-menu-footer">
+    <span class="status-dot"></span>
+    API Online
+  </div>
+
+</div>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+  <main class="container about-container">
+    <section class="about-card">
+
+      <h1>About DitDev</h1>
+      <p class="about-intro">
+        DitDev is a personal developer hub created to distribute, document, and
+        maintain desktop and mobile applications with performance, simplicity, and usability in mind.
+      </p>
+
+      <div class="about-section">
+        <h2>What is DitDev?</h2>
+        <p>
+          DitDev serves as a centralized platform where all applications,
+          utilities, and experimental projects are published and maintained.
+          Automated GitHub release sync ensures users get the latest version without manual updates.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <h2>Main Focus</h2>
+        <ul>
+          <li>Desktop Applications (Windows, Linux, macOS)</li>
+          <li>Portable & Installer-based tools</li>
+          <li>Mobile Applications (Android & iOS)</li>
+          <li>Open-source & GitHub-first workflow</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Technology Stack</h2>
+        <ul>
+          <li>.NET (WPF, WinForms, ASP.NET)</li>
+          <li>JavaScript, HTML, CSS</li>
+          <li>GitHub API for automatic release sync</li>
+          <li>Modern UI/UX with dark mode-first design</li>
+        </ul>
+      </div>
+
+      <div class="about-section">
+        <h2>Why DitDev?</h2>
+        <p>
+          The goal of DitDev is to eliminate friction between development and
+          distribution. Every application listed here is automatically synced
+          with GitHub releases, ensuring users always get the latest version
+          seamlessly.
+        </p>
+      </div>
+
+      <div class="about-section">
+        <h2>Open Source & Transparency</h2>
+        <p>
+          Most projects under DitDev are open-source and publicly available on
+          GitHub. Users are free to inspect the code, submit issues, and
+          contribute to development.
+        </p>
+      </div>
+
+      <div class="about-footer">
+        <p>
+          Built and maintained by <strong>rillToMe</strong><br>
+          Powered by GitHub Releases API
+        </p>
+      </div>
+
+    </section>
+  </main>
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <div class="footer-logo">DitDev<span>.</span></div>
+      <p>
+        Personal developer hub for tools, experiments,<br>
+        and open-source projects.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <h4>Links</h4>
+      <a href="index.html">Home</a>
+      <a href="../pages/repository.html">Repositories</a>
+      <a href="../pages/about.html">About</a>
+    </div>
+
+    <div class="footer-social">
+      <h4>Connect</h4>
+      <div class="social-icons">
+        <a href="https://github.com/rillToMe" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://instagram.com/rill_lyrics" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@goodvibes_music28" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://ditdev.vercel.app" target="_blank" aria-label="Portfolio"><i class="fa-solid fa-globe"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    &copy; <span id="year"></span> DitDev. All rights reserved.
+  </div>
+</footer>
+
+</body>
+</html>

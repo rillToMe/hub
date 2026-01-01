@@ -1,0 +1,32 @@
+{
+  "apps": [
+    {
+      "id": "ditdev-hub.vercel.app/app/server-manager",
+      "name": "ASP.NET Server Manager",
+      "developer": "DitDev",
+      "repo": "rillToMe/ASP.NET-ServerManager",
+      "thumbnail": "assets/img/hotaru_icon.png",
+      "icon": "assets/img/hotaru_icon.png",
+      "description": "Lightweight desktop tool to manage ASP.NET servers easily.",
+      "platforms": ["windows"],
+      "license": {
+        "name": "MIT",
+        "opensource": true
+      }
+    },
+    {
+      "id": "ditdev-hub.vercel.app/app/atlas",
+      "name": "Atlas",
+      "developer": "DitDev",
+      "repo": "rillToMe/atlas",
+      "thumbnail": "assets/img/Lynae_icon.png",
+      "icon": "assets/img/Lynae_icon.png",
+      "description": "Lightweight desktop tool to manage ASP.NET servers easily.",
+      "platforms": ["windows"],
+      "license": {
+        "name": "MIT",
+        "opensource": true
+      }
+    }
+  ]
+}
