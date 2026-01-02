@@ -17,8 +17,6 @@ loginForm.addEventListener('submit', async (e) => {
     errorMessage.classList.remove('show');
 
     try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
         const response = await fetch('/api/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -27,16 +25,19 @@ loginForm.addEventListener('submit', async (e) => {
 
         const data = await response.json();
 
-        if (response.ok && data.success) {
-            sessionStorage.setItem('adminToken', data.token);
-            btnIcon.className = "fa-solid fa-check";
-            btnText.innerText = "Success!";
-            setTimeout(() => {
-                window.location.href = "/api/admin/index.html";
-            }, 500);
-        } else {
-            throw new Error();
+        if (!response.ok || !data.success) {
+            throw new Error('Login failed');
         }
+
+        sessionStorage.setItem('adminToken', data.token);
+
+        btnIcon.className = "fa-solid fa-check";
+        btnText.innerText = "Success!";
+
+        setTimeout(() => {
+            window.location.replace('/admin/index.html');
+        }, 0);
+
     } catch (error) {
         errorMessage.classList.add('show');
         btnText.innerText = "Login to Dashboard";
