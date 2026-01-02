@@ -38,6 +38,12 @@ function generateToken() {
   return crypto.randomBytes(32).toString("hex");
 }
 
+res.json({ 
+  success: true, 
+  token: token,
+  expiresIn: 3600000 
+});
+
 function verifyToken(req, res, next) {
   const auth = req.headers.authorization;
   if (!auth?.startsWith("Bearer ")) {
