@@ -44,5 +44,4 @@ loginForm.addEventListener('submit', async (e) => {
         btnLogin.style.opacity = "1";
         btnLogin.style.pointerEvents = "auto";
     }
-
 });

@@ -5,36 +5,15 @@ const ADMIN_BASE = '/admin';
 
 
 function checkAuth() {
-    return !!sessionStorage.getItem('adminToken');
-}
-
-async function authGuard() {
     const token = sessionStorage.getItem('adminToken');
-
     if (!token) {
-        window.location.replace('/admin/login.html');
+        window.location.href = `${ADMIN_BASE}/login.html`;
         return false;
     }
-
-    try{
-        const res = await fetch('/api/auth/verify', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (!res.ok) throw new Error('Invalid token');
-
-        return true;
-    } catch {
-        sessionStorage.removeItem('adminToken');
-        window.location.replace('/admin/login.html');
-        return false;
-    }
+    return true;
 }
 
 function logout() {
-
     if (confirm('Log out now?')) {
         sessionStorage.removeItem('adminToken');
         window.location.href = `${ADMIN_BASE}/login.html`;
@@ -53,6 +32,12 @@ async function loadApps() {
                 'Authorization': `Bearer ${token}`
             }
         });
+        
+        if (response.status === 401) {
+            sessionStorage.removeItem('adminToken');
+            window.location.href = `${ADMIN_BASE}/login.html`;
+            return;
+        }
         
         if (!response.ok) throw new Error('Failed to load data');
         
@@ -233,24 +218,18 @@ function showStatus(message, type) {
     
     statusEl.innerHTML = message; 
     
-    statusEl.className = `status ${type} show`;
+    statusEl.className = `status ${type} show`; 
 }
 
 function hideStatus() {
     const statusEl = document.getElementById('statusMessage');
     statusEl.className = 'status';
-
     setTimeout(() => { statusEl.innerHTML = ''; }, 3000); 
 }
 
-(async () => {
-    const ok = await authGuard();
-    if (!ok) return;
-    await loadApps();
-})();
-
-
+if (checkAuth()) {
+    loadApps();
+}
 
 document.getElementById("year").textContent =
-
   new Date().getFullYear();
