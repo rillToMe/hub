@@ -4,26 +4,43 @@ const API_BASE = '/api';
 const ADMIN_BASE = '/api/admin';
 
 
-// Check authentication
 function checkAuth() {
-    const token = sessionStorage.getItem('adminToken');
-    if (!token) {
-        window.location.href = `${ADMIN_BASE}/login.html`;
-        return false;
-    }
-    return true;
+    return !!sessionStorage.ghetItem('adminToken');
 }
 
-// Logout function
+async function authGuard() {
+    const token = sessionStorage.getItem('adminToken');
+
+    if (!token) {
+        window.location.replace('/admin/login.html');
+        return false;
+    }
+
+    try{
+        const res = await fetch('/api/auth/verify', {
+            headers: {
+                'Authorization': 'Bearer ${token}'
+            }
+        });
+        
+        if (!res.ok) throw new Error('Invalid token');
+
+        return true;
+    } catch {
+        sessionStorage.removeItem('adminToken');
+        window.location.replace('/admin/login.html');
+        return false;
+    }
+}
+
 function logout() {
-    // jadikan bahasa inggris
+
     if (confirm('Log out now?')) {
         sessionStorage.removeItem('adminToken');
         window.location.href = `${ADMIN_BASE}/login.html`;
     }
 }
 
-// Load apps dari server
 async function loadApps() {
     if (!checkAuth()) return;
     
@@ -36,12 +53,6 @@ async function loadApps() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
-        if (response.status === 401) {
-            sessionStorage.removeItem('adminToken');
-            window.location.href = `${ADMIN_BASE}/login.html`;
-            return;
-        }
         
         if (!response.ok) throw new Error('Failed to load data');
         
@@ -56,7 +67,6 @@ async function loadApps() {
     }
 }
 
-// Render apps ke UI
 function renderApps() {
     const appsList = document.getElementById('appsList');
     if (apps.length === 0) {
@@ -92,7 +102,6 @@ function renderApps() {
     `).join('');
 }
 
-// Show add form
 function showAddForm() {
     editingIndex = null;
     document.getElementById('formTitle').textContent = 'Add New App';
@@ -100,7 +109,6 @@ function showAddForm() {
     document.getElementById('formContainer').classList.add('active');
 }
 
-// Edit app
 function editApp(index) {
     editingIndex = index;
     const app = apps[index];
@@ -119,7 +127,6 @@ function editApp(index) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Delete app
 function deleteApp(index) {
     if (confirm('Delete this app?')) {
         apps.splice(index, 1);
@@ -128,7 +135,6 @@ function deleteApp(index) {
     }
 }
 
-// Save app (add or edit)
 function saveApp() {
     const id = document.getElementById('inputId').value.trim();
     const name = document.getElementById('inputName').value.trim();
@@ -167,13 +173,11 @@ function saveApp() {
     setTimeout(() => hideStatus(), 3000);
 }
 
-// Close form
 function closeForm() {
     document.getElementById('formContainer').classList.remove('active');
     clearForm();
 }
 
-// Clear form
 function clearForm() {
     document.getElementById('inputId').value = '';
     document.getElementById('inputName').value = '';
@@ -187,8 +191,6 @@ function clearForm() {
     document.getElementById('inputOpensource').checked = true;
 }
 
-// Save langsung ke file JSON
-// Save ke DATABASE (bukan file)
 async function saveToFile() {
     if (!checkAuth()) return;
 
@@ -229,25 +231,24 @@ async function saveToFile() {
 function showStatus(message, type) {
     const statusEl = document.getElementById('statusMessage');
     
-    // Ganti .textContent jadi .innerHTML biar ikon <i> bisa muncul
     statusEl.innerHTML = message; 
     
-    statusEl.className = `status ${type} show`; // Pastikan ada class 'show' atau animasi lo
+    statusEl.className = `status ${type} show`;
 }
 
-// Hide status message
 function hideStatus() {
     const statusEl = document.getElementById('statusMessage');
     statusEl.className = 'status';
-    // Opsional: kosongin isinya pas sembunyi
+
     setTimeout(() => { statusEl.innerHTML = ''; }, 3000); 
 }
 
-// Check auth dan load apps saat page load
-if (checkAuth()) {
-    loadApps();
-}
+(async () => {
+    if (await authGuard()) {
+        loadApps();
+    }
+})();
 
-//anu
+
 document.getElementById("year").textContent =
   new Date().getFullYear();
