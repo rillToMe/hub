@@ -52,6 +52,10 @@ function logout() {
 
 async function loadApps() {
     if (!checkAuth()) return;
+
+    const saveBtn = document.getElementById('btnSaveAll');
+    saveBtn.disabled = true;
+    isDataLoaded = false;
     
     try {
         showStatus('Loading data...', 'info');
@@ -75,11 +79,14 @@ async function loadApps() {
         apps = data.apps || [];
         
         isDataLoaded = true; 
+        document.getElementById('btnSaveAll').disabled = false;
         
         renderApps();
         showStatus('Data loaded successfully!', 'success');
         setTimeout(() => hideStatus(), 2000);
     } catch (error) {
+        document.getElementById('btnSaveAll').disabled = true; 
+        isDataLoaded = false;
         showStatus('Error loading data: ' + error.message, 'error');
         console.error('Load error:', error);
     }
@@ -213,7 +220,7 @@ async function saveToFile() {
     if (!checkAuth()) return;
 
     if (!isDataLoaded) {
-        showStatus('Wait! Data is still loading from database. Please wait a moment.', 'error');
+        showStatus('Wait! Data is still loading from Neon...', 'error');
         return;
     }
 
