@@ -92,22 +92,29 @@ body {
     text-decoration: none;
     border-radius: 12px;
     font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.nav-links a i {
-    font-size: 1.1rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
 }
 
 .nav-links a:hover {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(139, 92, 246, 0.15);
     color: #a78bfa;
+    transform: scale(1.05) translateX(8px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links a:hover i {
+    color: #8b5cf6;
+    transform: rotate(-10deg); 
+    transition: transform 0.3s ease;
 }
 
 .nav-links a.active {
     background: #8b5cf6;
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    color: #fff !important;
+    transform: scale(1.05) translateX(8px);
+    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
 }
 
 .nav-footer {
@@ -135,21 +142,22 @@ body {
     border: none;
     color: white;
     padding: 12px;
-    border-radius: 12px; 
+    border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .nav-logout-btn:hover {
     background: #dc2626;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    transform: scale(1.02);
+    filter: brightness(1.1);
 }
+
 
 
 h1 {
@@ -459,5 +467,6 @@ input[type="checkbox"] {
     color: #3b82f6; 
 
 }
+
 
 
