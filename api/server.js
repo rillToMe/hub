@@ -13,11 +13,8 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.join(__dirname, "..");
 
 app.use(express.json());
-
 app.use(express.static(ROOT_DIR));
-
 app.use("/backend", express.static(path.join(__dirname, "public")));
-
 app.use("/admin", express.static(path.join(__dirname, "admin")));
 
 app.use((req, res, next) => {
@@ -32,17 +29,11 @@ const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-const activeSessions = new Set();
+const activeSessions = new Map(); 
 
 function generateToken() {
   return crypto.randomBytes(32).toString("hex");
 }
-
-res.json({ 
-  success: true, 
-  token: token,
-  expiresIn: 3600000 
-});
 
 function verifyToken(req, res, next) {
   const auth = req.headers.authorization;
@@ -51,8 +42,11 @@ function verifyToken(req, res, next) {
   }
 
   const token = auth.slice(7);
-  if (!activeSessions.has(token)) {
-    return res.status(401).json({ error: "Invalid token" });
+  const session = activeSessions.get(token);
+  
+  if (!session || Date.now() > session.expiry) {
+    activeSessions.delete(token);
+    return res.status(401).json({ error: "Invalid or expired token" });
   }
 
   next();
@@ -66,15 +60,24 @@ app.post("/api/admin/login", (req, res) => {
     password === process.env.ADMIN_PASSWORD
   ) {
     const token = generateToken();
-    activeSessions.add(token);
-    return res.json({ success: true, token });
+    const expiresIn = 3600000; 
+    const expiry = Date.now() + expiresIn;
+    
+    activeSessions.set(token, { expiry });
+    
+    return res.json({ 
+      success: true, 
+      token: token,
+      expiresIn: expiresIn 
+    });
   }
 
-  res.status(401).json({ success: false });
+  res.status(401).json({ success: false, message: "Invalid credentials" });
 });
 
 app.post("/api/admin/logout", verifyToken, (req, res) => {
-  activeSessions.delete(req.headers.authorization.slice(7));
+  const token = req.headers.authorization.slice(7);
+  activeSessions.delete(token);
   res.json({ success: true });
 });
 
@@ -93,26 +96,36 @@ app.get("/api/public/apps", async (req, res) => {
 });
 
 app.get("/api/apps", verifyToken, async (req, res) => {
-  const { rows } = await pool.query(
-    "SELECT data FROM apps WHERE id = $1",
-    ["ditdev-hub"]
-  );
+  try {
+    const { rows } = await pool.query(
+      "SELECT data FROM apps WHERE id = $1",
+      ["ditdev-hub"]
+    );
 
-  res.json(rows[0]?.data || { apps: [] });
+    res.json(rows[0]?.data || { apps: [] });
+  } catch (err) {
+    console.error("GET APPS ERROR:", err);
+    res.status(500).json({ error: "Failed to load apps" });
+  }
 });
 
 app.post("/api/apps", verifyToken, async (req, res) => {
-  await pool.query(
-    `
-    INSERT INTO apps (id, data)
-    VALUES ($1, $2::jsonb)
-    ON CONFLICT (id)
-    DO UPDATE SET data = EXCLUDED.data
-    `,
-    ["ditdev-hub", req.body]
-  );
+  try {
+    await pool.query(
+      `
+      INSERT INTO apps (id, data)
+      VALUES ($1, $2::jsonb)
+      ON CONFLICT (id)
+      DO UPDATE SET data = EXCLUDED.data
+      `,
+      ["ditdev-hub", req.body]
+    );
 
-  res.json({ success: true });
+    res.json({ success: true });
+  } catch (err) {
+    console.error("SAVE APPS ERROR:", err);
+    res.status(500).json({ error: "Failed to save apps" });
+  }
 });
 
 app.get("/api/releases/latest/:owner/:repo", async (req, res) => {
@@ -166,6 +179,15 @@ app.get("/api/releases/:owner/:repo", async (req, res) => {
     res.status(500).json({ error: "GitHub fetch failed" });
   }
 });
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [token, session] of activeSessions.entries()) {
+    if (now > session.expiry) {
+      activeSessions.delete(token);
+    }
+  }
+}, 600000);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
