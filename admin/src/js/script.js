@@ -3,10 +3,39 @@ let editingIndex = null;
 const API_BASE = '/api';
 const ADMIN_BASE = '/admin';
 
+const AuthStorage = {
+    setToken(token, expiresIn = 3600000) {
+        const expiry = Date.now() + expiresIn;
+        localStorage.setItem('adminToken', token);
+        localStorage.setItem('tokenExpiry', expiry.toString());
+    },
+    
+    getToken() {
+        const token = localStorage.getItem('adminToken');
+        const expiry = localStorage.getItem('tokenExpiry');
+        
+        if (!token || !expiry) return null;
+        
+        if (Date.now() > parseInt(expiry)) {
+            this.clearToken();
+            return null;
+        }
+        
+        return token;
+    },
+    
+    clearToken() {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('tokenExpiry');
+    },
+    
+    isTokenValid() {
+        return this.getToken() !== null;
+    }
+};
 
 function checkAuth() {
-    const token = sessionStorage.getItem('adminToken');
-    if (!token) {
+    if (!AuthStorage.isTokenValid()) {
         window.location.href = `${ADMIN_BASE}/login.html`;
         return false;
     }
@@ -15,7 +44,7 @@ function checkAuth() {
 
 function logout() {
     if (confirm('Log out now?')) {
-        sessionStorage.removeItem('adminToken');
+        AuthStorage.clearToken();
         window.location.href = `${ADMIN_BASE}/login.html`;
     }
 }
@@ -25,7 +54,7 @@ async function loadApps() {
     
     try {
         showStatus('Loading data...', 'info');
-        const token = sessionStorage.getItem('adminToken');
+        const token = AuthStorage.getToken();
         
         const response = await fetch(`${API_BASE}/apps`, {
             headers: {
@@ -34,7 +63,7 @@ async function loadApps() {
         });
         
         if (response.status === 401) {
-            sessionStorage.removeItem('adminToken');
+            AuthStorage.clearToken();
             window.location.href = `${ADMIN_BASE}/login.html`;
             return;
         }
@@ -181,7 +210,7 @@ async function saveToFile() {
 
     try {
         showStatus('Saving to database...', 'info');
-        const token = sessionStorage.getItem('adminToken');
+        const token = AuthStorage.getToken();
 
         const response = await fetch(`${API_BASE}/apps`, {
             method: 'POST',
@@ -193,7 +222,7 @@ async function saveToFile() {
         });
 
         if (response.status === 401) {
-            sessionStorage.removeItem('adminToken');
+            AuthStorage.clearToken();
             window.location.href = `${ADMIN_BASE}/login.html`;
             return;
         }
@@ -212,12 +241,9 @@ async function saveToFile() {
     }
 }
 
-
 function showStatus(message, type) {
     const statusEl = document.getElementById('statusMessage');
-    
     statusEl.innerHTML = message; 
-    
     statusEl.className = `status ${type} show`; 
 }
 
@@ -231,5 +257,4 @@ if (checkAuth()) {
     loadApps();
 }
 
-document.getElementById("year").textContent =
-  new Date().getFullYear();
+document.getElementById("year").textContent = new Date().getFullYear();
