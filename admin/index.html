@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="/admin/src/css/style.css">
 </head>
 <body>
+    <nav class="admin-nav">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>DitDev Hub <small>v1.0</small></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="/index.html" target="_blank"><i class="fa-solid fa-globe"></i> View Site</a></li>
+                <li><a href="https://neon.tech" target="_blank"><i class="fa-solid fa-database"></i> Database</a></li>
+                <li><a href="https://github.com/rillToMe" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a></li>
+            </ul>
+            <div class="nav-user">
+                <span><i class="fa-solid fa-circle-user"></i> Admin</span>
+                <button onclick="logout()" class="nav-logout-btn" title="Logout">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
     <div class="container">
         <div class="header">
             <h1><i class="fa-solid fa-gauge-high"></i> Admin Panel - Apps Manager</h1>
@@ -85,3 +106,4 @@
 </body>
 
 </html>
+
