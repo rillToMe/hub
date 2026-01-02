@@ -1,12 +1,14 @@
 let apps = [];
 let editingIndex = null;
 const API_BASE = '/api';
+const ADMIN_BASE = '/api/admin';
+
 
 // Check authentication
 function checkAuth() {
     const token = sessionStorage.getItem('adminToken');
     if (!token) {
-        window.location.href = '/admin/login.html';
+        window.location.href = `${ADMIN_BASE}/login.html`;
         return false;
     }
     return true;
@@ -17,7 +19,7 @@ function logout() {
     // jadikan bahasa inggris
     if (confirm('Log out now?')) {
         sessionStorage.removeItem('adminToken');
-        window.location.href = '/admin/login.html';
+        window.location.href = `${ADMIN_BASE}/login.html`;
     }
 }
 
@@ -37,7 +39,7 @@ async function loadApps() {
         
         if (response.status === 401) {
             sessionStorage.removeItem('adminToken');
-            window.location.href = '/admin/login.html';
+            window.location.href = `${ADMIN_BASE}/login.html`;
             return;
         }
         
@@ -205,7 +207,7 @@ async function saveToFile() {
 
         if (response.status === 401) {
             sessionStorage.removeItem('adminToken');
-            window.location.href = '/admin/login.html';
+            window.location.href = `${ADMIN_BASE}/login.html`;
             return;
         }
 
