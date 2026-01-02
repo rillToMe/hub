@@ -2,203 +2,216 @@ let apps = [];
 let editingIndex = null;
 const API_BASE = '/api';
 
+// ================= AUTH =================
 function checkAuth() {
-    const token = sessionStorage.getItem('adminToken');
-    if (!token) {
-        window.location.href = '/api/admin/login.html';
-        return false;
-    }
-    return true;
+  const token = sessionStorage.getItem('adminToken');
+  if (!token) {
+    window.location.href = '/admin/login.html';
+    return false;
+  }
+  return true;
 }
 
 function logout() {
-    if (confirm('Log out now?')) {
-        sessionStorage.removeItem('adminToken');
-        window.location.href = '/api/admin/login.html';
-    }
+  if (confirm('Log out now?')) {
+    sessionStorage.removeItem('adminToken');
+    window.location.href = '/admin/login.html';
+  }
 }
 
+// ================= LOAD FROM DATABASE =================
 async function loadApps() {
-    if (!checkAuth()) return;
+  if (!checkAuth()) return;
 
-    try {
-        showStatus('Loading data...', 'info');
-        const token = sessionStorage.getItem('adminToken');
+  try {
+    showStatus('Loading data from database...', 'info');
+    const token = sessionStorage.getItem('adminToken');
 
-        const response = await fetch(`${API_BASE}/apps`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+    const res = await fetch(`${API_BASE}/apps`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-        if (response.status === 401) {
-            sessionStorage.removeItem('adminToken');
-            window.location.href = '/api/admin/login.html';
-            return;
-        }
-
-        if (!response.ok) throw new Error('Failed to load data');
-
-        const data = await response.json();
-        apps = data.apps || [];
-        renderApps();
-
-        showStatus('Data loaded successfully!', 'success');
-        setTimeout(hideStatus, 2000);
-    } catch (err) {
-        console.error(err);
-        showStatus('Error loading data', 'error');
+    if (res.status === 401) {
+      sessionStorage.removeItem('adminToken');
+      window.location.href = '/admin/login.html';
+      return;
     }
+
+    if (!res.ok) throw new Error('Failed to load apps');
+
+    const data = await res.json();
+    apps = data.apps || [];
+    renderApps();
+
+    showStatus('Data loaded from database', 'success');
+    setTimeout(hideStatus, 2000);
+  } catch (err) {
+    console.error(err);
+    showStatus('Database load failed', 'error');
+  }
 }
 
+// ================= RENDER =================
 function renderApps() {
-    const appsList = document.getElementById('appsList');
+  const appsList = document.getElementById('appsList');
 
-    if (apps.length === 0) {
-        appsList.innerHTML =
-            '<div style="text-align:center;padding:40px;color:#64748b">No apps found</div>';
-        return;
-    }
+  if (apps.length === 0) {
+    appsList.innerHTML = `
+      <div style="text-align:center;padding:40px;color:#64748b;">
+        No apps found. Add your first app.
+      </div>
+    `;
+    return;
+  }
 
-    appsList.innerHTML = apps.map((app, i) => `
-        <div class="app-card">
-            <div class="app-header">
-                <div class="app-info">
-                    <h3>${app.name}</h3>
-                    <p>${app.description}</p>
-                </div>
-                <div class="app-actions">
-                    <button onclick="editApp(${i})">
-                        <i class="fa-solid fa-pen-to-square"></i> Edit
-                    </button>
-                    <button onclick="deleteApp(${i})">
-                        <i class="fa-solid fa-trash"></i> Delete
-                    </button>
-                </div>
-            </div>
+  appsList.innerHTML = apps.map((app, i) => `
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-info">
+          <h3>${app.name}</h3>
+          <p>${app.description}</p>
         </div>
-    `).join('');
+        <div class="app-actions">
+          <button onclick="editApp(${i})">Edit</button>
+          <button onclick="deleteApp(${i})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
+// ================= FORM =================
 function showAddForm() {
-    editingIndex = null;
-    document.getElementById('formTitle').textContent = 'Add New App';
-    clearForm();
-    document.getElementById('formContainer').classList.add('active');
+  editingIndex = null;
+  document.getElementById('formTitle').textContent = 'Add New App';
+  clearForm();
+  document.getElementById('formContainer').classList.add('active');
 }
 
-function editApp(i) {
-    editingIndex = i;
-    const a = apps[i];
+function editApp(index) {
+  editingIndex = index;
+  const app = apps[index];
 
-    inputId.value = a.id;
-    inputName.value = a.name;
-    inputDeveloper.value = a.developer;
-    inputRepo.value = a.repo;
-    inputThumbnail.value = a.thumbnail;
-    inputIcon.value = a.icon;
-    inputDescription.value = a.description;
-    inputPlatforms.value = a.platforms.join(', ');
-    inputLicense.value = a.license.name;
-    inputOpensource.checked = a.license.opensource;
+  document.getElementById('formTitle').textContent = 'Edit App';
+  document.getElementById('inputId').value = app.id;
+  document.getElementById('inputName').value = app.name;
+  document.getElementById('inputDeveloper').value = app.developer;
+  document.getElementById('inputRepo').value = app.repo;
+  document.getElementById('inputThumbnail').value = app.thumbnail;
+  document.getElementById('inputIcon').value = app.icon;
+  document.getElementById('inputDescription').value = app.description;
+  document.getElementById('inputPlatforms').value = app.platforms.join(', ');
+  document.getElementById('inputLicense').value = app.license.name;
+  document.getElementById('inputOpensource').checked = app.license.opensource;
 
-    document.getElementById('formContainer').classList.add('active');
-    scrollTo(0, 0);
+  document.getElementById('formContainer').classList.add('active');
 }
 
-function deleteApp(i) {
-    if (confirm('Delete this app?')) {
-        apps.splice(i, 1);
-        renderApps();
-        showStatus('App deleted. Remember to save.', 'info');
-    }
+function deleteApp(index) {
+  if (confirm('Delete this app?')) {
+    apps.splice(index, 1);
+    renderApps();
+    showStatus('App removed. Save to apply changes.', 'info');
+  }
 }
 
 function saveApp() {
-    const id = inputId.value.trim();
-    const name = inputName.value.trim();
-    const dev = inputDeveloper.value.trim();
+  const id = inputId.value.trim();
+  const name = inputName.value.trim();
+  const developer = inputDeveloper.value.trim();
 
-    if (!id || !name || !dev) {
-        showStatus('ID, Name, Developer required', 'error');
-        return;
+  if (!id || !name || !developer) {
+    showStatus('ID, Name, and Developer are required', 'error');
+    return;
+  }
+
+  const app = {
+    id,
+    name,
+    developer,
+    repo: inputRepo.value.trim(),
+    thumbnail: inputThumbnail.value.trim(),
+    icon: inputIcon.value.trim(),
+    description: inputDescription.value.trim(),
+    platforms: inputPlatforms.value.split(',').map(p => p.trim()).filter(Boolean),
+    license: {
+      name: inputLicense.value.trim(),
+      opensource: inputOpensource.checked
     }
+  };
 
-    const data = {
-        id,
-        name,
-        developer: dev,
-        repo: inputRepo.value,
-        thumbnail: inputThumbnail.value,
-        icon: inputIcon.value,
-        description: inputDescription.value,
-        platforms: inputPlatforms.value.split(',').map(x => x.trim()).filter(Boolean),
-        license: {
-            name: inputLicense.value,
-            opensource: inputOpensource.checked
-        }
-    };
+  if (editingIndex !== null) {
+    apps[editingIndex] = app;
+  } else {
+    apps.push(app);
+  }
 
-    if (editingIndex !== null) apps[editingIndex] = data;
-    else apps.push(data);
-
-    closeForm();
-    renderApps();
-    showStatus('Local data updated. Save to server.', 'success');
+  closeForm();
+  renderApps();
+  showStatus('Local changes ready. Click save.', 'info');
 }
 
-async function saveToFile() {
-    if (!checkAuth()) return;
+// ================= SAVE TO DATABASE =================
+async function saveToDatabase() {
+  if (!checkAuth()) return;
 
-    try {
-        showStatus('Saving...', 'info');
-        const token = sessionStorage.getItem('adminToken');
+  try {
+    showStatus('Saving to database...', 'info');
+    const token = sessionStorage.getItem('adminToken');
 
-        const r = await fetch(`${API_BASE}/apps`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ apps })
-        });
+    const res = await fetch(`${API_BASE}/apps`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ apps })
+    });
 
-        if (r.status === 401) {
-            sessionStorage.removeItem('adminToken');
-            window.location.href = '/api/admin/login.html';
-            return;
-        }
-
-        if (!r.ok) throw new Error();
-
-        showStatus('<i class="fa-solid fa-check"></i> Saved successfully', 'success');
-    } catch {
-        showStatus('Save failed', 'error');
+    if (res.status === 401) {
+      sessionStorage.removeItem('adminToken');
+      window.location.href = '/admin/login.html';
+      return;
     }
+
+    if (!res.ok) throw new Error('Save failed');
+
+    showStatus('Saved to database successfully', 'success');
+    setTimeout(hideStatus, 3000);
+  } catch (err) {
+    console.error(err);
+    showStatus('Database save failed', 'error');
+  }
 }
 
+// ================= UI HELPERS =================
 function closeForm() {
-    formContainer.classList.remove('active');
-    clearForm();
+  document.getElementById('formContainer').classList.remove('active');
+  clearForm();
 }
 
 function clearForm() {
-    document.querySelectorAll('#formContainer input, textarea').forEach(el => {
-        if (el.type === 'checkbox') el.checked = true;
-        else el.value = '';
-    });
+  document.querySelectorAll('#formContainer input, #formContainer textarea')
+    .forEach(el => el.value = '');
+  inputOpensource.checked = true;
 }
 
 function showStatus(msg, type) {
-    statusMessage.innerHTML = msg;
-    statusMessage.className = `status ${type} show`;
+  const el = document.getElementById('statusMessage');
+  el.innerHTML = msg;
+  el.className = `status ${type} show`;
 }
 
 function hideStatus() {
-    statusMessage.className = 'status';
-    statusMessage.innerHTML = '';
+  const el = document.getElementById('statusMessage');
+  el.className = 'status';
+  el.innerHTML = '';
 }
 
+// ================= INIT =================
 if (checkAuth()) loadApps();
 
-document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('year').textContent =
+  new Date().getFullYear();
