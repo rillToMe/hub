@@ -24,8 +24,3 @@ document.getElementById("year").textContent =
 
 const links = document.querySelectorAll(".nav-links a, .mobile-menu a");
 const current = location.pathname.split("/").pop();
-links.forEach(link => {
-  if (link.getAttribute("href").includes(current)) {
-    link.classList.add("active");
-  }
-});
