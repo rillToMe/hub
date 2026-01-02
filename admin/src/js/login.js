@@ -28,7 +28,7 @@ loginForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok && data.success) {
-            localStorage.getItem('adminToken');
+            sessionStorage.setItem('adminToken', data.token);
             btnIcon.className = "fa-solid fa-check";
             btnText.innerText = "Success!";
             setTimeout(() => {
@@ -44,4 +44,5 @@ loginForm.addEventListener('submit', async (e) => {
         btnLogin.style.opacity = "1";
         btnLogin.style.pointerEvents = "auto";
     }
+
 });
