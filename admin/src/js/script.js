@@ -1,4 +1,5 @@
 let apps = [];
+let isDataLoaded = false;
 let editingIndex = null;
 const API_BASE = '/api';
 const ADMIN_BASE = '/admin';
@@ -72,6 +73,9 @@ async function loadApps() {
         
         const data = await response.json();
         apps = data.apps || [];
+        
+        isDataLoaded = true; 
+        
         renderApps();
         showStatus('Data loaded successfully!', 'success');
         setTimeout(() => hideStatus(), 2000);
@@ -208,6 +212,11 @@ function clearForm() {
 async function saveToFile() {
     if (!checkAuth()) return;
 
+    if (!isDataLoaded) {
+        showStatus('Wait! Data is still loading from database. Please wait a moment.', 'error');
+        return;
+    }
+
     try {
         showStatus('Saving to database...', 'info');
         const token = AuthStorage.getToken();
@@ -218,7 +227,7 @@ async function saveToFile() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ apps })
+            body: JSON.stringify({ apps }) 
         });
 
         if (response.status === 401) {
