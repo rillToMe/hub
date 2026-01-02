@@ -92,7 +92,20 @@ async function loadApps() {
     }
 }
 
+function updateStats() {
+    document.getElementById('statTotal').textContent = apps.length;
+
+    const windowsCount = apps.filter(app => 
+        app.platforms.some(p => p.toLowerCase().includes('windows'))
+    ).length;
+    document.getElementById('statWindows').textContent = windowsCount;
+
+    const osCount = apps.filter(app => app.license.opensource === true).length;
+    document.getElementById('statOS').textContent = osCount;
+}
+
 function renderApps() {
+    updateStats();
     const appsList = document.getElementById('appsList');
     if (apps.length === 0) {
         appsList.innerHTML = '<div style="text-align: center; padding: 40px; color: #64748b;">No apps found. Add your first app!</div>';
@@ -274,3 +287,4 @@ if (checkAuth()) {
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
+
