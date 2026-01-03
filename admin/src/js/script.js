@@ -296,3 +296,15 @@ document.querySelector('.main-content').addEventListener('click', () => {
     document.querySelector('.admin-nav').classList.remove('mobile-active');
 });
 
+function toggleSidebar() {
+    const nav = document.querySelector('.admin-nav');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    nav.classList.toggle('mobile-active');
+    
+    if (nav.classList.contains('mobile-active')) {
+        overlay.style.display = 'block';
+    } else {
+        overlay.style.display = 'none';
+    }
+}
