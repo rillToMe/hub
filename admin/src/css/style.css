@@ -532,67 +532,45 @@ input[type="checkbox"] {
 }
 
 
-@media (max-width: 992px) {
-    :root {
-        --sidebar-width: 80px; 
-    }
-
-    .nav-logo span, 
-    .nav-logo small, 
-    .nav-links span, 
-    .nav-user span, 
-    .nav-logout-btn span {
-        display: none;
-    }
-
-    .nav-logo i {
-        margin-bottom: 0;
-    }
-
-    .nav-links a {
-        justify-content: center;
-        padding: 15px;
-    }
+.mobile-toggle {
+    display: none;
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #334155;
 }
 
 @media (max-width: 768px) {
-    .admin-layout {
-        flex-direction: column; 
+    .mobile-toggle {
+        display: flex; 
     }
 
     .admin-nav {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 15px;
-        border-right: none;
-        border-bottom: 1px solid #1e293b;
+        left: -280px; 
+        width: 280px;
+        transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .admin-nav.mobile-active {
+        left: 0;
+        box-shadow: 10px 0 50px rgba(0,0,0,0.5);
     }
 
     .main-content {
         margin-left: 0;
         width: 100%;
-        padding: 20px;
-    }
-
-    .nav-links {
-        flex-direction: row; 
-        justify-content: space-around;
-        margin: 15px 0;
-    }
-
-    .nav-logo, .nav-footer {
-        display: none; 
+        padding: 15px;
     }
 
     .stats-grid {
-        grid-template-columns: 1fr; 
-    }
-
-    .header h1 {
-        font-size: 20px;
+        grid-template-columns: 1fr;
     }
 }
+
 
 
 
