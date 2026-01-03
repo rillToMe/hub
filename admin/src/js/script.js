@@ -289,22 +289,29 @@ if (checkAuth()) {
 document.getElementById("year").textContent = new Date().getFullYear();
 
 function toggleSidebar() {
-    document.querySelector('.admin-nav').classList.toggle('mobile-active');
-}
-
-document.querySelector('.main-content').addEventListener('click', () => {
-    document.querySelector('.admin-nav').classList.remove('mobile-active');
-});
-
-function toggleSidebar() {
     const nav = document.querySelector('.admin-nav');
     const overlay = document.querySelector('.sidebar-overlay');
     
-    nav.classList.toggle('mobile-active');
+    const isActive = nav.classList.toggle('mobile-active');
     
-    if (nav.classList.contains('mobile-active')) {
+    if (isActive) {
         overlay.style.display = 'block';
+        document.body.style.overflow = 'hidden'; 
     } else {
         overlay.style.display = 'none';
+        document.body.style.overflow = 'auto'; 
     }
 }
+
+document.addEventListener('click', (e) => {
+    const nav = document.querySelector('.admin-nav');
+    const overlay = document.querySelector('.sidebar-overlay');
+    const mobileToggle = document.querySelector('.mobile-toggle');
+
+    if (nav.classList.contains('mobile-active') && 
+        !nav.contains(e.target) && 
+        !mobileToggle.contains(e.target)) {
+        toggleSidebar();
+    }
+});
+
