@@ -288,3 +288,11 @@ if (checkAuth()) {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+function toggleSidebar() {
+    document.querySelector('.admin-nav').classList.toggle('mobile-active');
+}
+
+document.querySelector('.main-content').addEventListener('click', () => {
+    document.querySelector('.admin-nav').classList.remove('mobile-active');
+});
+
