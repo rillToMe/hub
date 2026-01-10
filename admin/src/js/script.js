@@ -37,7 +37,7 @@ const AuthStorage = {
 
 function checkAuth() {
     if (!AuthStorage.isTokenValid()) {
-        window.location.href = `${ADMIN_BASE}/login.html`;
+        window.location.href = `${ADMIN_BASE}/index.html`;
         return false;
     }
     return true;
@@ -46,7 +46,7 @@ function checkAuth() {
 function logout() {
     if (confirm('Log out now?')) {
         AuthStorage.clearToken();
-        window.location.href = `${ADMIN_BASE}/login.html`;
+        window.location.href = `${ADMIN_BASE}/index.html`;
     }
 }
 
@@ -69,7 +69,7 @@ async function loadApps() {
         
         if (response.status === 401) {
             AuthStorage.clearToken();
-            window.location.href = `${ADMIN_BASE}/login.html`;
+            window.location.href = `${ADMIN_BASE}/index.html`;
             return;
         }
         
@@ -252,7 +252,7 @@ async function saveToFile() {
 
         if (response.status === 401) {
             AuthStorage.clearToken();
-            window.location.href = `${ADMIN_BASE}/login.html`;
+            window.location.href = `${ADMIN_BASE}/index.html`;
             return;
         }
 
