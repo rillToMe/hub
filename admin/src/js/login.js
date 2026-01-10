@@ -36,7 +36,7 @@ const AuthStorage = {
 };
 
 if (AuthStorage.isTokenValid()) {
-    window.location.href = "/admin/daskboard.html";
+    window.location.href = "/admin/dashboard.html";
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -70,7 +70,7 @@ loginForm.addEventListener('submit', async (e) => {
             btnText.innerText = "Success!";
             
             setTimeout(() => {
-                window.location.href = "/admin/daskboard.html";
+                window.location.href = "/admin/dashboard.html";
             }, 500);
         } else {
             throw new Error(data.message || 'Login failed');
